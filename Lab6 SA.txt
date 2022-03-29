@@ -1,0 +1,22 @@
+
+from http import client
+
+# Per the documentation, we get a connection object by calling the HTTPConnection() or HTTPSConnection() methods,
+# with parameters for the address and port.
+cxn = client.HTTPSConnection('jsonplaceholder.typicode.com', 443)
+
+# Let's test our connection by making a HEAD request, validating the HTTP status code, and printing the response headers.
+cxn.request('HEAD', '/')
+
+response = cxn.getresponse()
+
+if response.status is 200:
+  print('Response:',response.status, '🎉🎉🎉', '\n')
+else:
+  print('Uh Oh, got',response.status)
+
+print(response.headers)
+
+
+
+
