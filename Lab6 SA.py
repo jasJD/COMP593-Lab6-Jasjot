@@ -5,11 +5,11 @@ import requests
 
 def main():
     user_num = argv[1]
-    dict = get_user_info(user_num)
+    dict = poke_info(user_num)
 
     if dict:
 
-        user_strings =  get_user_strings(dict)
+        user_strings =  poke_info(dict)
         pastebin_url = post_to_pastebin(user_strings[0], user_strings[1])
         print(pastebin_url)
 
@@ -23,7 +23,7 @@ def post_to_pastebin(title, body):
         'api_paste_code': body,
         'api_paste_name': title
     
-    
+    }
     resp_msg = requests.post(" https://pastebin.com/api/api_post.php", data=params)
 
     if resp_msg.status_code == 200:
@@ -32,18 +32,18 @@ def post_to_pastebin(title, body):
     else:
         print('failed. Code:',resp_msg.status_code)
         return str(resp_msg.status_code)
-            }
-
-def get_user_strings(user_dict):
-    title = user_dict['name'] + "'s Location"
-    body_text = "Latitude: " + user_dict['address']['geo']['lat'] + "\n"
-    body_text += "Longitude: " + user_dict['address']['geo']['lng']
+                
+def get_poke_string(poke_info):
+    title = poke_info['name'] + "'s'Stats"
+    body_text =  poke_info['weight'] + '\n'
+    body_text += "Ability 1:" + poke_info["abilities"][0]['ability']["name"] + '\n'
+    body_text += "Ability 2:" + poke_info['abilities'][1]['ability']["name"] + '\n'
     return (title,body_text)
     
 
-def get_user_info(user_num):
+def poke_info(user_num):
     print("Getting user info...", end='')
-    resp_msg = requests.get("https://jsonplaceholder.typicode.com/users/" + user_num)
+    resp_msg = requests.get("https://pokeapi.co/api/v2/pokemon-form/" + user_num)
 
     if resp_msg.status_code == 200:
         print('Success')
